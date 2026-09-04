@@ -6,6 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
 public class Person {
@@ -14,10 +17,14 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "First name is mandatory")
     private String name;
 
+    @NotBlank(message = "Last name is mandatory")
     private String lastName;
 
+    @NotNull(message = "Birthdate is mandatory")
+    @PastOrPresent(message = "Birthdate cannot be in the future")
     private Date birthdate;
 
     public Person() {
