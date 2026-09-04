@@ -30,4 +30,19 @@ class PersonRepositoryTest {
         Assertions.assertThat(savedPerson.getId()).isGreaterThan(0);
 
     }
+
+    @Test
+    public void testFindByLastNameIgnoreCasePaginated() {
+        repo.save(new Person("Alice", "Taylor", new Date(375485579000L)));
+        repo.save(new Person("Bob", "Taylor", new Date(474327179000L)));
+
+        org.springframework.data.domain.Page<Person> page = repo.findByLastNameIgnoreCase(
+                "taylor",
+                org.springframework.data.domain.PageRequest.of(0, 10)
+        );
+
+        Assertions.assertThat(page).isNotNull();
+        Assertions.assertThat(page.getContent()).isNotEmpty();
+        Assertions.assertThat(page.getContent()).allMatch(p -> "Taylor".equalsIgnoreCase(p.getLastName()));
+    }
 }
